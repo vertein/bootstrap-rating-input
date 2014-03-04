@@ -3,13 +3,32 @@
   $.fn.rating = function () {
 
     var element;
+    
+    //Defaults for rounding
+    var defaults = {
+        round : {down: .25, up: .75}
+    }
 
     // A private function to highlight a star corresponding to a given value
     function _paintValue(ratingInput, value) {
-      var selectedStar = $(ratingInput).find('[data-value=' + value + ']');
-      selectedStar.removeClass('fa-star-o').addClass('fa-star');
-      selectedStar.prevAll('[data-value]').removeClass('fa-star-o').addClass('fa-star');
-      selectedStar.nextAll('[data-value]').removeClass('fa-star').addClass('fa-star-o');
+        var decimalValue = (value-Math.floor(value)).toFixed(2);
+        var whichStar = Math.ceil(value);
+        if(decimalValue!=0){
+            whichStar = whichStar-1;
+        }
+        var selectedStar = $(ratingInput).find('[data-value=' + value + ']');
+        selectedStar.removeClass('fa-star-o').addClass('fa-star');
+        selectedStar.prevAll('[data-value]').removeClass('fa-star-o').addClass('fa-star');
+        selectedStar.nextAll('[data-value]').removeClass('fa-star').addClass('fa-star-o');
+        var nextStar = selectedStar.next('[data-value]');
+        var icon = 'fa-star-o';
+        if(decimalValue>defaults.round.down){
+            icon = 'fa-star-half-o';
+            if(decimalValue>defaults.round.up){
+                icon='fa-star';
+            }
+        }
+        nextStar.removeClass('fa-star-o').addClass(icon);
     }
 
     // A private function to remove the highlight for a selected rating

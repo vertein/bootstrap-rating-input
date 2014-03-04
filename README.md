@@ -42,6 +42,18 @@ Sure! You can set min and max values adding `data-min` and `data-max`:
 
     <input class="rating" data-max="5" data-min="1" id="some_id" name="your_awesome_parameter" type="number" />
 
+### Can I display half stars?
+
+Sure! You can set the value to anything and using the round defaults in the file, have it round anyway you want:
+
+    <input class="rating" data-max="5" data-min="1" value="3.46" id="some_id" name="your_awesome_parameter" type="number" />
+
+    var defaults = {
+        round : {down: .25, up: .75}
+    }
+
+    Anything less than .25 goes down, higher than .75 goes up, and in between shows a half star.
+
 ### Can I set a special value for empty ratings?
 
 You can add the attribute `data-empty-value` to indicate which value should send the form when it have an empty rating. This can be used, for example, to have an special value indicating the user didn't seleted anything:
