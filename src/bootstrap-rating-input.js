@@ -93,8 +93,12 @@
     $('.rating-input')
       // Highlight stars on hovering
       .on('mouseenter', '[data-value]', function () {
-        var self = $(this);
-        _paintValue(self.closest('.rating-input'), self.data('value'));
+          var rating_system = $(this).closest('.rating-input').find(".rating");
+          var rating_readOnly = rating_system.data('readonly');
+          if(!rating_readOnly){
+              var self = $(this);
+              _paintValue(self.closest('.rating-input'), self.data('value'));
+          }
       })
       // View current value while mouse is out
       .on('mouseleave', '[data-value]', function () {
@@ -111,12 +115,16 @@
       })
       // Set the selected value to the hidden field
       .on('click', '[data-value]', function (e) {
-        var self = $(this),
-          val = self.data('value'),
-          input = self.siblings('input');
-        _updateValue(input,val);
-        e.preventDefault();
-        return false;
+          var rating_system = $(this).closest('.rating-input').find(".rating");
+          var rating_readOnly = rating_system.data('readonly');
+          if(!rating_readOnly){
+              var self = $(this),
+              val = self.data('value'),
+              input = self.siblings('input');
+              _updateValue(input,val);
+              e.preventDefault();
+              return false;
+          }
       })
       // Remove value on clear
       .on('click', '.rating-clear', function (e) {

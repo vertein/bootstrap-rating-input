@@ -82,17 +82,9 @@ You know... [Twitter Bootstrap](http://getbootstrap.com) and [jQuery](http://jqu
 
 ## Can I generate read-only stars for displaying?
 
-If you think about it you don't want to use a plugin to generate static HTML code that is as simple as this:
+Yes, if you want to set the data-readonly to "true", you won't be able to highlight the stars when hover, or update the value when clicked.  Setting the value would be good ahead of time.
 
-    <i class='fa fa-star'></i><i class='fa fa-star'></i><i class='fa fa-star'></i><i class='fa fa-star-o'></i><i class='fa fa-star-o'></i>
-
-You can easily generate such code with your favourite template engine and a loop. With Ruby and HAML it could look like this:
-
-    / Given a variable val with the value you want to represent and a variable max that contains the maximum number of stars:
-    - max.times do |i|
-      %i{class: "fa fa-star#{'-empty' if i>val}"}
-
-Well, HAML is awesome, but you are a programmer, so you'll be able to addapt this to your favorite language...
+     <input class="rating" data-max="5" data-min="1" value="3" id="some_id" name="your_awesome_parameter" type="number" />
 
 ## It looks nice, but I want to complain because it doesn't fit my favorite use case
 
