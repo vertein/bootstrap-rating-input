@@ -14,7 +14,7 @@ After searching for existing widgets, I found three categories of them:
   - The ones that adds A LOT of JavaScript and CSS code to my project.
   - The ones that adds A LOT of JavaScript and CSS code and depends on PNG images.
 
-I don't want to add a whole multipurpose library just to put a few stars in my interface, I want my rating stars to look awesome in retina screens without worrying about image versions and dynamically replacing them, and Bootstrap already includes a set of beautifully designed vectorial icons by Glyphicons, so I thought I could create something simpler.
+I don't want to add a whole multipurpose library just to put a few stars in my interface, I want my rating stars to look awesome in retina screens without worrying about image versions and dynamically replacing them.  This uses the font-awesome stars which also includes half stars!
 
 ## Ok, enough talking, tell me how this thing works!
 
@@ -72,13 +72,13 @@ You know... [Twitter Bootstrap](http://getbootstrap.com) and [jQuery](http://jqu
 
 If you think about it you don't want to use a plugin to generate static HTML code that is as simple as this:
 
-    <i class='glyphicon glyphicon-star'></i><i class='glyphicon glyphicon-star'></i><i class='glyphicon glyphicon-star'></i><i class='glyphicon glyphicon-star-empty'></i><i class='glyphicon glyphicon-star-empty'></i>
+    <i class='fa fa-star'></i><i class='fa fa-star'></i><i class='fa fa-star'></i><i class='fa fa-star-o'></i><i class='fa fa-star-o'></i>
 
 You can easily generate such code with your favourite template engine and a loop. With Ruby and HAML it could look like this:
 
     / Given a variable val with the value you want to represent and a variable max that contains the maximum number of stars:
     - max.times do |i|
-      %i{class: "glyphicon glyphicon-star#{'-empty' if i>val}"}
+      %i{class: "fa fa-star#{'-empty' if i>val}"}
 
 Well, HAML is awesome, but you are a programmer, so you'll be able to addapt this to your favorite language...
 
