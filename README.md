@@ -86,6 +86,16 @@ Yes, if you want to set the data-readonly to "true", you won't be able to highli
 
      <input class="rating" data-max="5" data-min="1" value="3" id="some_id" name="your_awesome_parameter" type="number" />
 
+## Can I update my input's value and tell the stars to update?
+Sure!  A use case could be a pop up modal that invites the user to rate something.  If this rating is stored in the db, you only want to fetch the value and update when the box is clicked to save on db hits.
+
+    //sets the value.
+    $('#some_id').val(your_rating);
+    //draws the stars
+    $('#some_id').redraw(your_rating);
+
+This could also set the amount of stars shown, without actually setting a value!
+
 ## It looks nice, but I want to complain because it doesn't fit my favorite use case
 
 I have implemented this for my project in my environment and sharing it for free. Leave me an issue with your suggestions and I'll eventually push a fix, but this is MIT licensed, so you're welcome to fork this project, do pull requests with fixes and improvements, reimplement better versions of it for your own or do whatever you want, I'll be happy if it becomes useful or inspires at least one more person.

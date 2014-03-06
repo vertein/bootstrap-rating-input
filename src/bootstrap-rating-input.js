@@ -1,35 +1,40 @@
-(function ($) {
-
-  $.fn.rating = function () {
-
-    var element;
+(function ($) {   
     
     //Defaults for rounding
-    var defaults = {
-        round : {down: .25, up: .75}
-    }
-
-    // A private function to highlight a star corresponding to a given value
-    function _paintValue(ratingInput, value) {
-        var decimalValue = (value-Math.floor(value)).toFixed(2);
-        var whichStar = Math.ceil(value);
-        if(decimalValue!=0){
-            whichStar = whichStar-1;
-        }
-        var selectedStar = $(ratingInput).find('[data-value=' + value + ']');
-        selectedStar.removeClass('fa-star-o').addClass('fa-star');
-        selectedStar.prevAll('[data-value]').removeClass('fa-star-o').addClass('fa-star');
-        selectedStar.nextAll('[data-value]').removeClass('fa-star').addClass('fa-star-o');
-        var nextStar = selectedStar.next('[data-value]');
-        var icon = 'fa-star-o';
-        if(decimalValue>defaults.round.down){
-            icon = 'fa-star-half-o';
-            if(decimalValue>defaults.round.up){
-                icon='fa-star';
-            }
-        }
-        nextStar.removeClass('fa-star-o').addClass(icon);
-    }
+  var defaults = {
+      round : {down: .25, up: .75}
+  };
+   
+  $.fn.redraw = function(value){
+      
+      // A private function to highlight a star corresponding to a given value
+      function _paintValue(ratingInput, value) {
+          var decimalValue = (value-Math.floor(value)).toFixed(2);
+          var whichStar = Math.ceil(value);
+          if(decimalValue!=0){
+              whichStar = whichStar-1;
+          }
+          var selectedStar = $(ratingInput).find('[data-value='+whichStar+']');
+          selectedStar.removeClass('fa-star-o').addClass('fa-star');
+          selectedStar.prevAll('[data-value]').removeClass('fa-star-o').addClass('fa-star');
+          selectedStar.nextAll('[data-value]').removeClass('fa-star').addClass('fa-star-o');
+          var nextStar = selectedStar.next('[data-value]');
+          var icon = 'fa-star-o';
+          if(decimalValue>defaults.round.down){
+              icon = 'fa-star-half-o';
+              if(decimalValue>defaults.round.up){
+                  icon='fa-star';
+              }
+          }
+          nextStar.removeClass('fa-star-o').addClass(icon);
+      } 
+      
+      var self = this;
+      _paintValue(self.closest('.rating-input'), value);
+  };
+    
+  $.fn.rating = function () {
+    var element;   
 
     // A private function to remove the highlight for a selected rating
     function _clearValue(ratingInput) {
@@ -50,21 +55,20 @@
 
     // Iterate and transform all selected inputs
     for (element = this.length - 1; element >= 0; element--) {
-
       var el, i,
         originalInput = $(this[element]),
         max = originalInput.data('max') || 5,
         min = originalInput.data('min') || 0,
         clearable = originalInput.data('clearable') || null,
+        readonly = originalInput.data('readonly') || null,
         stars = '';
-
       // HTML element construction
-      for (i = min; i <= max; i++) {
+      for (i = min; i <=max; i++) {
         // Create <max> empty stars
-        stars += ['<span class="fa fa-star-o" data-value="', i, '"></span>'].join('');
+        stars += ['<span class="fa fa-star-o"       data-value="', i, '"></span>'].join('');
       }
       // Add a clear link if clearable option is set
-      if (clearable) {
+      if (clearable && !readonly) {
         stars += [
           ' <a class="rating-clear" style="display:none;" href="javascript:void">',
           '<span class="glyphicon glyphicon-remove"></span> ',
@@ -86,7 +90,6 @@
 
       // Replace original inputs HTML with the new one
       originalInput.replaceWith($(el).append(newInput));
-
     }
 
     // Give live to the newly generated widgets
@@ -97,7 +100,7 @@
           var rating_readOnly = rating_system.data('readonly');
           if(!rating_readOnly){
               var self = $(this);
-              _paintValue(self.closest('.rating-input'), self.data('value'));
+              self.redraw(self.data('value'));
           }
       })
       // View current value while mouse is out
@@ -108,7 +111,7 @@
           min = input.data('min'),
           max = input.data('max');
         if (val >= min && val <= max) {
-          _paintValue(self.closest('.rating-input'), val);
+            self.redraw(val);
         } else {
           _clearValue(self.closest('.rating-input'));
         }
@@ -123,8 +126,11 @@
               input = self.siblings('input');
               _updateValue(input,val);
               e.preventDefault();
+              $.ajax({
+                  
+              });
               return false;
-          }
+         }
       })
       // Remove value on clear
       .on('click', '.rating-clear', function (e) {
@@ -142,7 +148,7 @@
           min = input.data('min'),
           max = input.data('max');
         if (val !== "" && +val >= min && +val <= max) {
-          _paintValue(this, val);
+          $(this).redraw(val);
           $(this).find('.rating-clear').show();
         }
         else {
